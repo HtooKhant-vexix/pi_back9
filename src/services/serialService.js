@@ -75,8 +75,11 @@ const createUARTPort = (config) => {
         return;
       }
 
-      port.write(data, (err) => {
-        console.log(data, "this is from data");
+      const buffer = Buffer.from(data, "hex");
+      console.log(`Sending data: ${buffer.toString("hex")}`);
+
+      port.write(buffer, (err) => {
+        console.log(buffer, "this is from data");
         if (err) {
           reject(err);
           return;
