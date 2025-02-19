@@ -76,6 +76,7 @@ const createUARTPort = (config) => {
       }
 
       port.write(data, (err) => {
+        console.log(data, "this is from data");
         if (err) {
           reject(err);
           return;
