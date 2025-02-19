@@ -169,6 +169,7 @@ const sendSerialData = async (data) => {
     await port.write(data);
     return {
       success: true,
+      data: data,
       message: `Data sent successfully via GPIO ${port.pins.txd} (TXD) at ${port.config.baudRate} baud`,
     };
   } catch (error) {
