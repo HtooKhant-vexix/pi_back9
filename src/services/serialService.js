@@ -49,7 +49,8 @@ const createUARTPort = (config) => {
       });
 
       port.on("data", (data) => {
-        const receivedData = data.toString().trim();
+        // const receivedData = data.toString().trim();
+        const receivedData = data;
         console.log(`Received data: ${receivedData}`);
         if (receivedData) {
           redisService.cacheSerialData({
