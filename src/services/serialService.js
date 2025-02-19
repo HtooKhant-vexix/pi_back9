@@ -49,8 +49,7 @@ const createUARTPort = (config) => {
       });
 
       port.on("data", (data) => {
-        // const receivedData = data.toString().trim();
-        const receivedData = data;
+        const receivedData = data.toString("hex").trim();
         console.log(`Received data: ${receivedData}`);
         if (receivedData) {
           redisService.cacheSerialData({
@@ -75,11 +74,8 @@ const createUARTPort = (config) => {
         return;
       }
 
-      const buffer = Buffer.from(data, "hex");
-      console.log(`Sending data: ${buffer.toString("hex")}`);
-
-      port.write(buffer, (err) => {
-        console.log(buffer, "this is from data");
+      console.log(`Sending data: ${data}`);
+      port.write(data, "hex", (err) => {
         if (err) {
           reject(err);
           return;
@@ -109,7 +105,7 @@ const createUARTPort = (config) => {
       let timeout;
 
       const onData = (chunk) => {
-        data += chunk.toString();
+        data += chunk.toString("hex");
 
         clearTimeout(timeout);
         timeout = setTimeout(() => {
@@ -169,7 +165,7 @@ const port = createUARTPort({
 // Public API
 const sendSerialData = async (data) => {
   try {
-    console.log(data);
+    console.log(`Sending data: ${data}`);
     await port.write(data);
     return {
       success: true,
