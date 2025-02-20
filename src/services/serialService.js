@@ -75,22 +75,22 @@ const createUARTPort = (config) => {
         return;
       }
 
-      // console.log(`Sending data: ${data}`);
-      // port.write(data, "hex", (err) => {
-      //   if (err) {
-      //     reject(err);
-      //     return;
-      //   }
-      //   redisService.cacheSerialData({
-      //     type: "tx",
-      //     pin: pins.txd,
-      //     data: data,
-      //     baudRate: config.baudRate,
-      //     timestamp: Date.now(),
-      //   });
+      console.log(`Sending data: ${data}`);
+      port.write(data, "hex", (err) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        redisService.cacheSerialData({
+          type: "tx",
+          pin: pins.txd,
+          data: data,
+          baudRate: config.baudRate,
+          timestamp: Date.now(),
+        });
 
-      //   resolve();
-      // });
+        resolve();
+      });
     });
   };
 
@@ -165,8 +165,9 @@ const port = createUARTPort({
 // Public API
 const sendSerialData = async (data) => {
   try {
-    console.log(`Sending data: ${data}`);
+    // console.log(`Sending data: ${data}`);
     await port.write(data);
+    // console.log("kwkwkwkwwkk");
     return {
       success: true,
       data: data,
