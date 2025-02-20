@@ -49,7 +49,7 @@ const createUARTPort = (config) => {
       });
 
       port.on("data", (data) => {
-        const receivedData = data;
+        const receivedData = data.toString("hex");
         // const receivedData = data.toString("hex").trim();
         console.log(`Received data: ${receivedData}`);
         // if (receivedData) {
@@ -75,23 +75,22 @@ const createUARTPort = (config) => {
         return;
       }
 
-      console.log(`Sending data: ${data}`);
-      port.write(data, "hex", (err) => {
-        if (err) {
-          reject(err);
-          return;
-        }
+      // console.log(`Sending data: ${data}`);
+      // port.write(data, "hex", (err) => {
+      //   if (err) {
+      //     reject(err);
+      //     return;
+      //   }
+      //   redisService.cacheSerialData({
+      //     type: "tx",
+      //     pin: pins.txd,
+      //     data: data,
+      //     baudRate: config.baudRate,
+      //     timestamp: Date.now(),
+      //   });
 
-        redisService.cacheSerialData({
-          type: "tx",
-          pin: pins.txd,
-          data: data,
-          baudRate: config.baudRate,
-          timestamp: Date.now(),
-        });
-
-        resolve();
-      });
+      //   resolve();
+      // });
     });
   };
 
