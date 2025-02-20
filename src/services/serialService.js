@@ -49,18 +49,17 @@ const createUARTPort = (config) => {
       });
 
       port.on("data", (data) => {
-        const receivedData = data.toString("hex");
-        // const receivedData = data.toString("hex").trim();
+        const receivedData = data.toString("hex").trim();
         console.log(`Received data: ${receivedData}`);
-        // if (receivedData) {
-        //   redisService.cacheSerialData({
-        //     type: "rx",
-        //     pin: pins.rxd,
-        //     data: receivedData,
-        //     baudRate: config.baudRate,
-        //     timestamp: Date.now(),
-        //   });
-        // }
+        if (receivedData) {
+          redisService.cacheSerialData({
+            type: "rx",
+            pin: pins.rxd,
+            data: receivedData,
+            baudRate: config.baudRate,
+            timestamp: Date.now(),
+          });
+        }
       });
     } catch (error) {
       console.error("Failed to initialize serial port:", error.message);
@@ -76,20 +75,27 @@ const createUARTPort = (config) => {
       }
 
       console.log(`Sending data: ${data}`);
-      port.write(data, "hex", (err) => {
+      port.flush((err) => {
         if (err) {
           reject(err);
           return;
         }
-        redisService.cacheSerialData({
-          type: "tx",
-          pin: pins.txd,
-          data: data,
-          baudRate: config.baudRate,
-          timestamp: Date.now(),
-        });
 
-        resolve();
+        port.write(data, "hex", (err) => {
+          if (err) {
+            reject(err);
+            return;
+          }
+          redisService.cacheSerialData({
+            type: "tx",
+            pin: pins.txd,
+            data: data,
+            baudRate: config.baudRate,
+            timestamp: Date.now(),
+          });
+
+          resolve();
+        });
       });
     });
   };
@@ -165,9 +171,8 @@ const port = createUARTPort({
 // Public API
 const sendSerialData = async (data) => {
   try {
-    // console.log(`Sending data: ${data}`);
+    console.log(`Sending data: ${data}`);
     await port.write(data);
-    // console.log("kwkwkwkwwkk");
     return {
       success: true,
       data: data,
