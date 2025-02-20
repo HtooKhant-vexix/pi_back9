@@ -49,17 +49,18 @@ const createUARTPort = (config) => {
       });
 
       port.on("data", (data) => {
-        const receivedData = data.toString("hex").trim();
+        const receivedData = data;
+        // const receivedData = data.toString("hex").trim();
         console.log(`Received data: ${receivedData}`);
-        if (receivedData) {
-          redisService.cacheSerialData({
-            type: "rx",
-            pin: pins.rxd,
-            data: receivedData,
-            baudRate: config.baudRate,
-            timestamp: Date.now(),
-          });
-        }
+        // if (receivedData) {
+        //   redisService.cacheSerialData({
+        //     type: "rx",
+        //     pin: pins.rxd,
+        //     data: receivedData,
+        //     baudRate: config.baudRate,
+        //     timestamp: Date.now(),
+        //   });
+        // }
       });
     } catch (error) {
       console.error("Failed to initialize serial port:", error.message);
