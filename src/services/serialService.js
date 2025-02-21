@@ -172,7 +172,7 @@ const port = createUARTPort({
 // Public API
 const sendSerialData = async (data) => {
   try {
-    console.log(`Sending data: ${data}`);
+    console.log(`Sending data >: ${data}`);
     await port.write(data);
     return {
       success: true,
