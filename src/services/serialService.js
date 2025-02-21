@@ -48,19 +48,19 @@ const createUARTPort = (config) => {
         console.error("Serial port error:", err.message);
       });
 
-      port.on("data", (data) => {
-        const receivedData = data.toString("hex").trim();
-        console.log(`Received data: ${receivedData}`);
-        if (receivedData) {
-          redisService.cacheSerialData({
-            type: "rx",
-            pin: pins.rxd,
-            data: receivedData,
-            baudRate: config.baudRate,
-            timestamp: Date.now(),
-          });
-        }
-      });
+      // port.on("data", (data) => {
+      //   const receivedData = data.toString("hex").trim();
+      //   console.log(`Received data: ${receivedData}`);
+      //   if (receivedData) {
+      //     redisService.cacheSerialData({
+      //       type: "rx",
+      //       pin: pins.rxd,
+      //       data: receivedData,
+      //       baudRate: config.baudRate,
+      //       timestamp: Date.now(),
+      //     });
+      //   }
+      // });
     } catch (error) {
       console.error("Failed to initialize serial port:", error.message);
       throw error;
@@ -86,6 +86,7 @@ const createUARTPort = (config) => {
             reject(err);
             return;
           }
+
           redisService.cacheSerialData({
             type: "tx",
             pin: pins.txd,
